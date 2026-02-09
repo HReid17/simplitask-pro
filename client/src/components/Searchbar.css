@@ -1,0 +1,106 @@
+.searchbar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+.searchbar form {
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+  border: 2px solid #777;
+  border-radius: 999px;
+  padding: 4px 14px;
+  width: 400px;
+  max-width: none;
+  position: relative;
+}
+
+.searchbar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 8px 10px;
+  font-family: inherit;
+  color: #111;
+}
+
+.searchbar input::placeholder {
+  color: #555;
+}
+
+.searchbar button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchbar .search-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+
+/* Results dropdown */
+
+.task-search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 2px solid #777;
+  border-radius: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-search-results li {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: #111;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.task-search-results li:hover {
+  background: #f2f2f2;
+  color: #007c55;
+}
+
+.task-search-empty {
+  position: absolute;
+  top: calc(100% + 6px); /* sits just under the search bar */
+  left: 0;
+  right: 0;
+
+  padding: 10px 14px;
+  color: #555;
+  background: #fff;
+  border: 2px solid #777;
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: center;
+  z-index: 20;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/*  Responsive  */
+
+@media (max-width: 480px) {
+  .searchbar {
+    width: 50%;
+    margin-left: 63.5px;
+  }
+}
