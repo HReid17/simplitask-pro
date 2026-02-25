@@ -2,6 +2,13 @@ import { z } from 'zod';
 
 // Register validation
 const registerSchema = z.object({
+
+    username: z
+        .string()
+        .min(3, "Username must be at least 3 characters")
+        .max(30, "Username must be under 30 characters")
+        .transform((val) => val.trim()),
+
     email: z
         .email({ message: 'Email must be a valid email address' })
         .transform((val) => val.trim().toLowerCase()),
@@ -24,7 +31,6 @@ export const validateRegister = (req, res, next) => {
 };
 
 // Login validation
-
 const loginSchema = z.object({
     email: z
         .email({ message: 'Email must be a valid email address' })

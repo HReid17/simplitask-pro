@@ -3,20 +3,20 @@ import pool from "../db/pool.js";
 
 const SALT_ROUNDS = 10;
 
-export const registerUser = async ({ email, password }) => {
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+export const registerUser = async ({ username, email, password }) => {
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     try {
         const result = await pool.query(
-            `INSERT INTO users (email, password_hash)
-            VALUES ($1, $2)
-            RETURNING id, email, role, created_at`,
-            [email, hashedPassword]
+            `INSERT INTO users (username, email, password_hash)
+       VALUES ($1, $2, $3)
+       RETURNING id, username, email, role, created_at`,
+            [username, email, hashedPassword]
         );
 
         return result.rows[0];
     } catch (err) {
-        if (err.code === '23505') {
+        if (err.code === "23505") {
             const e = new Error("EMAIL_ALREADY_EXISTS");
             e.status = 409;
             throw e;
@@ -29,7 +29,7 @@ export const registerUser = async ({ email, password }) => {
 export const loginUser = async ({ email, password }) => {
 
     const result = await pool.query(
-        `SELECT id, email, password_hash, role
+        `SELECT id, username, email, password_hash, role
         FROM users
         WHERE email = $1`,
         [email]
@@ -53,6 +53,7 @@ export const loginUser = async ({ email, password }) => {
 
     return {
         id: user.id,
+        username: user.username,
         email: user.email,
         role: user.role,
     }

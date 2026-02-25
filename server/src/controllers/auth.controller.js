@@ -18,14 +18,16 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
     try {
         const user = await loginUser(req.body);
+        console.log("LOGIN user:", user);
 
         const token = jwt.sign(
-            { id: user.id, role: user.role },
+            { id: user.id, role: user.role, username: user.username, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
 
         return res.status(200).json({ user, token });
+        
     } catch (err) {
         if (err.message === "INVALID_CREDENTIALS") {
             return res.status(401).json({ message: "Invalid email or password" });

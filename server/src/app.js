@@ -1,11 +1,19 @@
-import express from 'express'
-import authRoutes from './routes/auth.routes.js'
-import taskRoutes from './routes/tasks.routes.js'
-import projectRoutes from './routes/projects.routes.js'
+import cors from "cors";
+import express from 'express';
 
-import pool from './db/pool.js'
+import authRoutes from './routes/auth.routes.js';
+import taskRoutes from './routes/tasks.routes.js';
+import projectRoutes from './routes/projects.routes.js';
+
+import pool from './db/pool.js';
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 app.use(express.json());
 
