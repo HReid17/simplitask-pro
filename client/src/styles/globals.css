@@ -25,8 +25,22 @@ body,
   background-color: #F6F6F6;
 }
 
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.topbar {
+  width: 60%;
+  
+}
+
 .content {
   flex: 1;
+  min-width: 0;       
   padding: 24px;
   overflow: auto;
   background-color: #F6F6F6;

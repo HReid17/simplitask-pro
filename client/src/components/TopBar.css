@@ -1,23 +1,32 @@
 .top {
   display: flex;
-  align-items: center; 
-  position: sticky;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+  
+}
 
+.searchbar {
+  flex: 1;
+  max-width: 620px;
+  margin-bottom: 11px;
+  margin-right: 130px;
 }
 
 .profile {
   display: flex;
-  margin-top: 30px;
-  margin-left: 400px;
   align-items: center;
-  gap: 12px; 
+  gap: 12px;
+  margin-left: auto;
+  white-space: nowrap;
 }
 
 .profile h4 {
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #0a7a3a; 
+  color: #0a7a3a;
 }
 
 .profile .avatar {
@@ -29,12 +38,24 @@
   border-radius: 50%;
   font-size: 20px;
   font-weight: 700;
-  line-height: 1;              
   background: #fff;
   color: #000;
 }
 
-/* Hides profile on small screens */
+.logout-btn {
+  padding: 10px 14px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #f2f2f2;
+}
+
+/* Hide profile on small screens */
 @media (max-width: 900px) {
   .profile {
     display: none;

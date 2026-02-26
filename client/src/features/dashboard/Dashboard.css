@@ -112,7 +112,6 @@
 }
 
 /*  Calendar container  */
-
 .calendar-card {
   overflow: hidden;
 }
@@ -140,7 +139,6 @@
 
 
 /* Responsive tweaks */
-
 @media (max-width: 500px) {
   .dashboard-wrapper {
     padding: 1rem;

@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   margin-top: 10px;
-  margin-left: 50px;
+  margin-left: 60px;
 }
 
 .searchbar form {
@@ -13,7 +13,7 @@
   border: 2px solid #777;
   border-radius: 999px;
   padding: 4px 14px;
-  width: 400px;
+  width: 500px;
   max-width: none;
   position: relative;
 }
@@ -97,7 +97,6 @@
 
 
 /*  Responsive  */
-
 @media (max-width: 480px) {
   .searchbar {
     width: 50%;
