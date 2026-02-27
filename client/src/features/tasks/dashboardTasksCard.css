@@ -1,7 +1,7 @@
 /* Scrollable Tasks List */
 
-.tasks-card .tasks-list {   /* 3 items tall */
-  max-height: 9rem;
+.tasks-card .tasks-list {   /* 2 items tall */
+  max-height: 100px;
   overflow-y: auto;        /* enables scrolling if more tasks exist */
   padding-right: 0.5rem;   /* prevents text being hidden under scrollbar */
   margin: 0;
@@ -35,7 +35,7 @@
 .details {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+
   gap: 0.5rem;
   width: 90%;
 }
@@ -49,16 +49,20 @@
 }
 
 .details .date {
-  width: 140px;            /* keeps dates aligned */
-  text-align: right;
+  width: 140px;
+  text-align: left;
   color: #4b5563;
-  margin-right: 6rem;
 }
 
 .details .progress {
-  width: 80px;             /* keeps statuses aligned */
-  text-align: right;
+  width: 140px;   /* slightly wider for safety */
+  text-align: left;
   color: #6b7280;
+}
+
+.bottom {
+  display: flex;
+  gap: 2rem;
 }
 
 

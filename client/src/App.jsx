@@ -8,7 +8,7 @@ import Dashboard from "./features/dashboard/Dashboard";
 import TasksPage from "./features/tasks/TasksPage";
 import ProjectsPage from "./features/projects/ProjectsPage";
 import CalendarPage from "./features/calendar/CalendarPage";
-import ProjectCard from "./features/projects/projectCard";
+import ProjectCard from "./features/projects/ProjectCard";
 import NotFound from "./features/NotFound";
 
 export default function App() {

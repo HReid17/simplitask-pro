@@ -1,67 +1,119 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addProject, editProject, removeProject } from "./projectsSlice";
+
+// Thunks (async actions) for CRUD operations on projects
+import { fetchProjects, createProject, updateProject, deleteProject } from "./projectsSlice";
 import "./projectsPage.css";
 
+// Options used to render the Status dropdown + status dot colour in the UI
 const STATUS_OPTIONS = [
-    { value: "complete", label: "Complete", color: "green" },
-    { value: "in-progress", label: "In Progress", color: "yellow" },
-    { value: "not-started", label: "Not Started", color: "red" },
+    { value: "Not Started", label: "Not Started", color: "red" },
+    { value: "In Progress", label: "In Progress", color: "yellow" },
+    { value: "Complete", label: "Complete", color: "green" },
 ];
 
-// Using META as a quick lookup of the status (easier when it comes to color coding them)
-
+// Helper: given a status string, return the full metadata (label + colour)
+// Falls back to "Not Started" if status is missing/unknown.
 function statusMeta(status) {
-    return STATUS_OPTIONS.find((s) => s.value === status) || STATUS_OPTIONS[1];
+    return STATUS_OPTIONS.find((s) => s.value === status) || STATUS_OPTIONS[0];
 }
 
 export default function ProjectsPage() {
-
-    // Helpers
+    // Redux: dispatch actions/thunks
     const dispatch = useDispatch();
-    const navigate = useNavigate()
-    const projects = useSelector((s) => s.projects.projects)
 
-    // Form
-    const [showForm, setShowForm] = useState(false)
-    const [name, setName] = useState("")
-    const [due, setDue] = useState("")
-    const [status, setStatus] = useState("in-Progress")
+    // Router: navigate to another page programmatically
+    const navigate = useNavigate();
 
-    // Inline Edit
-    const [editingId, setEditingId] = useState(null)
-    const [draft, setDraft] = useState({ name: "", due: "", status: "in-progress" });
+    // Redux: read projects list from store
+    const projects = useSelector((s) => s.projects.projects);
 
+    // Fetch projects from backend when this page first loads
+    useEffect(() => {
+        dispatch(fetchProjects());
+    }, [dispatch]);
+
+    // ----------------------------
+    // Add Project form state
+    // ----------------------------
+    const [showForm, setShowForm] = useState(false);
+    const [name, setName] = useState("");
+    const [scheduledCompletion, setScheduledCompletion] = useState("");
+    const [status, setStatus] = useState("Not Started");
+
+    // ----------------------------
+    // Inline edit state
+    // editingId = which project is currently being edited
+    // draft = local "working copy" of that project's fields while editing
+    // ----------------------------
+    const [editingId, setEditingId] = useState(null);
+    const [draft, setDraft] = useState({
+        name: "",
+        scheduled_completion: "",
+        status: "Not Started",
+    });
+
+    // Reset the add form back to defaults
     const resetAddForm = () => {
-        setName(""),
-            setDue(""),
-            setStatus("in-progress")
+        setName("");
+        setScheduledCompletion("");
+        setStatus("Not Started");
     };
 
+    // Create a new project
     const handleAdd = (e) => {
-        e.preventDefault();
-        if (!name.trim()) return;
-        dispatch(addProject({ name: name.trim(), due, status }))
+        e.preventDefault(); // stop form from reloading the page
+        if (!name.trim()) return; // basic validation
+
+        // Dispatch thunk to create project on backend
+        dispatch(
+            createProject({
+                name: name.trim(),
+                scheduled_completion: scheduledCompletion || null, // send null if no date
+                status: status || "Not Started",
+            })
+        );
+
+        // Clear UI after create
         resetAddForm();
         setShowForm(false);
     };
 
+    // Enter edit mode for a specific project and pre-fill draft values
     const startEdit = (p) => {
         setEditingId(p.id);
-        setDraft({ name: p.name || "", due: p.due || "", status: p.status || "in-progress" })
+
+        // Date input needs YYYY-MM-DD, so slice the ISO string
+        setDraft({
+            name: p.name || "",
+            scheduled_completion: p.scheduled_completion ? p.scheduled_completion.slice(0, 10) : "",
+            status: p.status || "Not Started",
+        });
     };
 
+    // Save edits for a specific project
     const saveEdit = (id) => {
-        dispatch(editProject({ id, ...draft }))
+        dispatch(
+            updateProject({
+                id,
+                updates: {
+                    name: draft.name.trim(),
+                    scheduled_completion: draft.scheduled_completion || null,
+                    status: draft.status,
+                },
+            })
+        );
+
+        // Exit edit mode
         setEditingId(null);
     };
 
-    const cancelEdit = () => {
-        setEditingId(null)
-    };
+    // Exit edit mode without saving
+    const cancelEdit = () => setEditingId(null);
 
-    const fmt = (iso) => (iso ? new Date(iso).toLocaleDateString("en-GB") : "-")
+    // Helper to format ISO date into UK format for display
+    const fmt = (iso) => (iso ? new Date(iso).toLocaleDateString("en-GB") : "-");
 
     return (
         <div className="projects-wrapper">
@@ -69,20 +121,30 @@ export default function ProjectsPage() {
                 <h1>My Projects</h1>
 
                 <div className="header-buttons">
-                    <button className="link-btn" onClick={() => setShowForm((v) => !v)}>
+                    {/* Toggle the "Add New" form */}
+                    <button
+                        className="link-btn"
+                        onClick={() => setShowForm((v) => !v)}
+                        type="button"
+                    >
                         {showForm ? "Close" : "Add New"}
                     </button>
                 </div>
             </div>
 
+            {/* Column headings (mostly for layout / desktop view) */}
             <div className="projects-columns">
                 <div>Name</div>
                 <div>Scheduled Completion</div>
                 <div>Status</div>
             </div>
 
-            {(showForm && (
-                <form className="project-card project-card--editing project-card--new" onSubmit={(e) => handleAdd(e)}>
+            {/* Add new project form */}
+            {showForm && (
+                <form
+                    className="project-card project-card--editing project-card--new"
+                    onSubmit={handleAdd}
+                >
                     <div data-label="Name">
                         <input
                             type="text"
@@ -92,11 +154,15 @@ export default function ProjectsPage() {
                             required
                         />
                     </div>
+
                     <div data-label="Date">
-                        <input type="date"
-                            value={due}
-                            onChange={(e) => setDue(e.target.value)} />
+                        <input
+                            type="date"
+                            value={scheduledCompletion}
+                            onChange={(e) => setScheduledCompletion(e.target.value)}
+                        />
                     </div>
+
                     <div data-label="Status">
                         <div className="project-card-status">
                             <select value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -106,64 +172,98 @@ export default function ProjectsPage() {
                                     </option>
                                 ))}
                             </select>
+
                             <button className="save-btn" type="submit">
                                 Save
                             </button>
                         </div>
                     </div>
                 </form>
-            ))
-            }
+            )}
 
             <div className="projects-list">
+                {/* Empty state */}
                 {projects.length === 0 && <div className="empty">No projects yet...</div>}
 
+                {/* Render each project card */}
                 {projects.map((p) => {
+                    // meta controls status label + colour dot
                     const meta = statusMeta(p.status);
+
+                    // Is THIS project the one currently being edited?
                     const isEditing = editingId === p.id;
 
                     return (
-                        <div key={p.id} className={`project-card ${isEditing ? "project-card--editing" : ""}`}>
+                        <div
+                            key={p.id}
+                            className={`project-card ${isEditing ? "project-card--editing" : ""}`}
+                        >
+                            {/* NAME */}
                             <div data-label="Name">
                                 {isEditing ? (
+                                    // Editable name input
                                     <input
                                         autoFocus
                                         type="text"
                                         value={draft.name}
-                                        onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+                                        onChange={(e) =>
+                                            setDraft((d) => ({ ...d, name: e.target.value }))
+                                        }
                                     />
                                 ) : (
-                                    <button className="project-link" onClick={() => navigate(`/projects/${p.id}`)}>
+                                    // Click name to navigate to project detail page
+                                    <button
+                                        className="project-link"
+                                        onClick={() => navigate(`/projects/${p.id}`)}
+                                        type="button"
+                                    >
                                         {p.name}
                                     </button>
                                 )}
                             </div>
 
+                            {/* SCHEDULED COMPLETION DATE */}
                             <div data-label="Scheduled Completion">
                                 {isEditing ? (
+                                    // Date input expects YYYY-MM-DD
                                     <input
                                         type="date"
-                                        value={draft.due}
-                                        onChange={(e) => setDraft((d) => ({ ...d, due: e.target.value }))}
+                                        value={draft.scheduled_completion}
+                                        onChange={(e) =>
+                                            setDraft((d) => ({
+                                                ...d,
+                                                scheduled_completion: e.target.value,
+                                            }))
+                                        }
                                     />
                                 ) : (
-                                    fmt(p.due)
+                                    // Read-only formatted date
+                                    fmt(p.scheduled_completion)
                                 )}
                             </div>
 
-                            <div className={`project-card-status ${isEditing ? "project-card-status--edit" : ""}`}
-                                data-label="Status">
+                            {/* STATUS + ACTIONS */}
+                            <div
+                                className={`project-card-status ${isEditing ? "project-card-status--edit" : ""}`}
+                                data-label="Status"
+                            >
                                 {isEditing ? (
                                     <>
+                                        {/* Status dropdown */}
                                         <select
                                             value={draft.status}
-                                            onChange={(e) => setDraft(d => ({ ...d, status: e.target.value }))}
+                                            onChange={(e) =>
+                                                setDraft((d) => ({ ...d, status: e.target.value }))
+                                            }
                                         >
-                                            {STATUS_OPTIONS.map(o => (
-                                                <option key={o.value} value={o.value}>{o.label}</option>
+                                            {STATUS_OPTIONS.map((o) => (
+                                                <option key={o.value} value={o.value}>
+                                                    {o.label}
+                                                </option>
                                             ))}
                                         </select>
 
+                                        {/* Save / Cancel buttons */}
                                         <button className="save-btn" onClick={() => saveEdit(p.id)} type="button">
                                             Save
                                         </button>
@@ -173,15 +273,22 @@ export default function ProjectsPage() {
                                     </>
                                 ) : (
                                     <>
+                                        {/* Read-only status display */}
                                         <span>{meta.label}</span>
+
+                                        {/* Colour dot for quick status recognition */}
                                         <span className={`status-dot status-dot-${meta.color}`}></span>
+
                                         <div className="row-actions">
+                                            {/* Enable inline editing */}
                                             <button className="link-btn" onClick={() => startEdit(p)} type="button">
                                                 Edit
                                             </button>
+
+                                            {/* Delete project via thunk */}
                                             <button
                                                 className="delete-btn"
-                                                onClick={() => dispatch(removeProject(p.id))}
+                                                onClick={() => dispatch(deleteProject(p.id))}
                                                 type="button"
                                             >
                                                 Delete
@@ -189,13 +296,11 @@ export default function ProjectsPage() {
                                         </div>
                                     </>
                                 )}
-
                             </div>
                         </div>
-                    )
+                    );
                 })}
             </div>
-
-        </div >
-    )
+        </div>
+    );
 }
