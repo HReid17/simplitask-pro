@@ -102,9 +102,8 @@ export default function ProjectCard() {
             setTitle("");
             setDueDate("");
             setProgress(0);
-        } catch {
-            // Keep simple: if you want, show a message here
-            // (often errors are already stored/handled by the slice)
+        } catch (err) {
+            console.log(err)
         }
     };
 

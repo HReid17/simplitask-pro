@@ -25,7 +25,7 @@ export default function DashboardProjectsCard() {
                 </button>
             </div>
 
-            <div className="projects-list">
+            <div className="dashboard-projects-list">
                 {recentProjects.length === 0 ? (
                     <p>No projects</p>
                 ) : (

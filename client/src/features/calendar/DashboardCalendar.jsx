@@ -7,6 +7,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
+import "./dashboardCalendarPage.css"
+
 export default function DashboardCalendar() {
     // Grab tasks from Redux so this calendar stays in sync with the app
     const tasks = useSelector((s) => s.tasks.tasks);

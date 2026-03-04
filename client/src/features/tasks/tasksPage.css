@@ -1,224 +1,500 @@
+/* ------------------------------
+   Page container + spacing
+   ------------------------------ */
 .task-wrapper {
-    max-width: 980px;
+    /* Keeps content nicely centered and readable */
+    max-width: 1100px;
     margin: 0 auto;
+
+    /* Adds breathing room from the top nav / layout edges */
+    padding: 24px 18px 40px;
+
+    /* Makes the main area feel a bit more "app-like" */
     min-height: 0;
+}
+
+.task-wrapper {
+    background: transparent;
+}
+
+
+/* ------------------------------
+   Header area (title + add button)
+   ------------------------------ */
+.page-header {
+    /* Layout: title on left, actions on right */
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    /* Spacing around header */
+    margin: 10px 0 18px;
+    gap: 16px;
+}
+
+.page-header>h1 {
+    /* Strong headline but less “shouty” than 50px */
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: 1.05;
+    margin: 0;
+
+    /* Slightly softer than pure black */
+    color: #111827;
+}
+
+/* Header buttons wrapper (keeps your existing structure) */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Make the header "Add New" button look like a professional primary button */
+.header-buttons .link-btn {
+    appearance: none;
+    border: 1px solid #0f7a53;
+    background: linear-gradient(180deg, #1a9b69 0%, #0f7a53 100%);
+    color: #ffffff;
+
+    /* Button shape + spacing */
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 700;
+    text-decoration: none;
+
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(15, 122, 83, 0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+.header-buttons .link-btn:hover {
+    filter: brightness(1.03);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(15, 122, 83, 0.22);
+}
+
+.header-buttons .link-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 6px 14px rgba(15, 122, 83, 0.18);
+}
+
+
+/* ------------------------------
+   Generic "link button" styling
+   (Used inside table actions)
+   ------------------------------ */
+.link-btn {
+    /* Keep the “link” feel inside the table */
+    appearance: none;
+    border: 0;
+    background: none;
+
+    color: #0f7a53;
+    font-weight: 700;
+    cursor: pointer;
+
+    padding: 4px 0;
+    text-decoration: none;
+
+    transition: color 0.12s ease, opacity 0.12s ease;
+}
+
+/* Subtle underline on hover (more professional than always-underlined) */
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* ------------------------------
+   Add task form (card styling)
+   ------------------------------ */
+.add-task-form {
+    /* Makes the form feel like a "card" above the table */
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    /* Softer shadow for a professional look */
+    box-shadow: 0 10px 26px rgba(17, 24, 39, 0.08);
+
+    /* Layout + spacing */
+    padding: 14px;
+    margin: 0 0 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Inputs + selects share the same “system” styling */
+.add-task-form input,
+.add-task-form select {
+    height: 40px;
+    padding: 0 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #ffffff;
+
+    font-size: 14px;
+    color: #111827;
+
+    /* Smooth focus transitions */
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.add-task-form input::placeholder {
+    color: #9ca3af;
+}
+
+/* Better focus state (looks modern and clearer) */
+.add-task-form input:focus,
+.add-task-form select:focus {
+    outline: none;
+    border-color: #10a371;
+    box-shadow: 0 0 0 4px rgba(16, 163, 113, 0.15);
+}
+
+/* Keep date input aligned nicely */
+.add-task-form input[type="date"] {
+    padding-right: 10px;
+}
+
+
+.add-task-form button[type="submit"] {
+    height: 40px;
+    padding: 0 14px;
+
+    border-radius: 10px;
+    border: 1px solid #111827;
+    background: #111827;
+    color: #ffffff;
+
+    font-weight: 800;
+    cursor: pointer;
+
+    transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: 0 10px 22px rgba(17, 24, 39, 0.18);
+}
+
+.add-task-form button[type="submit"]:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.add-task-form button[type="submit"]:active {
+    transform: translateY(0px);
+}
+
+
+/* ------------------------------
+   Table wrapper = “Card”
+   ------------------------------ */
+.task-table-wrapper {
+    margin-top: 6px;
 }
 
 /* Scrollable container around the table */
 .task-table {
-    margin-top: 40px;
-    /* moved off the table element */
-    max-height: 60vh;
+    /* Card border + rounded corners */
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    /* Clean card shadow (less cartoon, more product UI) */
+    box-shadow: 0 12px 30px rgba(17, 24, 39, 0.10);
+
+    /* Helps sticky header look cleaner */
+    background: #ffffff;
+
+    /* Keep your scroll behavior */
+    max-height: 62vh;
     overflow: auto;
-    /* vertical + horizontal scroll if needed */
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
     -webkit-overflow-scrolling: touch;
 }
 
-/* table */
+/* Table base */
 .task-table table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    min-width: 720px;
-    /* allow horizontal scroll on small screens */
+    min-width: 760px;
+    /* keeps columns readable; enables horizontal scroll when needed */
 }
 
-/* Sticky header: stays visible while body scrolls */
+/* ------------------------------
+   Sticky header styling
+   ------------------------------ */
 .task-table thead th {
+    /* Header typography */
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    color: #111827;
+
+    /* Spacing */
+    padding: 14px 16px;
     text-align: left;
-    padding: 14px 14px;
-    border-bottom: 2px solid #111;
-    font-weight: 700;
-    font-size: 20px;
+
+    /* Sticky header */
     position: sticky;
     top: 0;
-    z-index: 1;
-    background: #fff;
-}
+    z-index: 2;
 
-.task-table tbody td {
-    padding: 12px 14px;
+    /* Header background + divider line */
+    background: #ffffff;
     border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
+
+    /* Slight shadow under header while scrolling (helps separation) */
+    box-shadow: 0 8px 12px rgba(17, 24, 39, 0.04);
 }
 
+/* ------------------------------
+   Body rows + cells
+   ------------------------------ */
+.task-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+
+    /* Prevent crazy wrapping while still staying readable */
+    white-space: nowrap;
+
+    font-size: 15px;
+    color: #111827;
+}
+
+/* Subtle zebra striping (professional, not cartoony) */
+.task-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Hover feedback for rows (helps usability) */
+.task-table tbody tr:hover {
+    background: #f3f4f6;
+}
+
+/* Remove last border line */
 .task-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Empty state row */
+/* Empty state row styling */
 .task-table td[colspan] {
+    /* Keeps your empty state aligned and readable */
     display: flex;
     align-items: center;
+    justify-content: center;
+
     text-align: center;
-    padding: 24px;
-    color: #374151;
+    padding: 26px;
+    color: #6b7280;
+    font-weight: 700;
 }
 
+/* =========================================================
+   Progress bar (Tasks table)
+   - Adds a subtle track + filled bar
+   - Keeps % text and pencil aligned
+   ========================================================= */
 
-.page-header {
+.progress-cell {
+    /* Keeps bar + meta stacked neatly */
     display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    /* Allows the bar to size nicely inside the cell */
+    min-width: 140px;
+}
+
+/* The “track” behind the progress */
+.progress-track {
+    /* Size/shape of the bar */
+    height: 12px;
+    width: 100%;
+    border-radius: 999px;
+
+    /* Neutral track background */
+    background: #e5e7eb;
+
+    /* Clips the fill inside rounded corners */
+    overflow: hidden;
+
+    /* Subtle inner border to look crisp */
+    border: 1px solid #d1d5db;
+}
+
+/* The filled part */
+.progress-fill {
+    height: 100%;
+
+    /* Default fill color (professional green) */
+    background: linear-gradient(180deg, #1a9b69 0%, #0f7a53 100%);
+
+    /* Smooth animation when values change */
+    transition: width 0.25s ease;
+}
+
+/* Row with the percentage text and pencil icon */
+.progress-meta {
+    display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    margin: 30px 0 18px;
-}
-
-.page-header>h1 {
-    font-size: 50px;
-}
-
-.link-btn {
-    appearance: none;
-    border: 0;
-    background: none;
-    color: #007c55;
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 4px 0;
-    margin-right: 10px;
-}
-
-.link-btn:hover {
-    color: #00b481;
-}
-
-.add-task-form {
-    display: flex;
-    flex-wrap: wrap;
     gap: 10px;
-    background: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 18px;
 }
 
-.add-task-form input,
-.add-task-form button[type="submit"] {
-    height: 36px;
-    padding: 0 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background: #fff;
+/* text styling */
+.progress-text {
+    font-weight: 800;
+    color: #111827;
     font-size: 14px;
 }
 
-.add-task-form input[type="date"] {
-    padding-right: 6px;
-}
-
-.add-task-form button[type="submit"] {
-    background: #111;
-    color: #fff;
-    border-color: #111;
-    cursor: pointer;
-}
-
-.add-task-form button[type="submit"]:hover {
-    filter: brightness(0.95);
-}
-
-.card {
-    background: #fff;
-    border: 2px solid #111;
-    border-radius: 14px;
-    padding: 6px;
-}
-
-.delete-btn {
-    appearance: none;
-    border: 0;
-    background: none;
-    color: #f70000;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 4px 0;
-    margin-left: 10px;
-}
-
-.delete-btn:hover {
-    color: #ff0000;
-    text-decoration: underline;
-}
-
-/* Icons */
-.sortIcon {
-    width: 14px;
-    height: 14px;
-    margin-bottom: 4px;
-    vertical-align: middle;
-}
-
-.sortingIcon {
-    width: 22px;
-    height: 22px;
-    margin-bottom: 4px;
-    vertical-align: middle;
-}
-
-.sortIcon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.sortIcon-btn:hover {
-    opacity: 0.7;
-    transform: scale(1.05);
-    transition: all 0.1s ease;
-}
-
+/* ------------------------------
+   Sort icons + buttons
+   ------------------------------ */
+.sortIcon-btn,
 .sortingIcon-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
+
+    /* Makes click target feel a bit nicer */
+    margin-left: 6px;
+    opacity: 0.85;
+
+    transition: opacity 0.12s ease, transform 0.12s ease;
 }
 
+.sortIcon-btn:hover,
 .sortingIcon-btn:hover {
-    opacity: 0.7;
-    transform: scale(1.05);
-    transition: all 0.1s ease;
+    opacity: 1;
+    transform: translateY(-1px);
 }
 
-.edit-btn {
-    display: inline-flex;
+/* Keep your icon sizes but align cleaner */
+.sortIcon {
     width: 14px;
     height: 14px;
+    vertical-align: middle;
+}
+
+.sortingIcon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+
+/* ------------------------------
+   Inline edit pencil icon
+   ------------------------------ */
+.edit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
     margin-left: 8px;
-    background: none;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    background: transparent;
+    cursor: pointer;
+
+    overflow: hidden;
+    padding: 0;
+
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}
+
+.edit-btn img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: block;
 }
 
 .edit-btn:hover {
-    opacity: 0.7;
-    transform: scale(1.05);
-    transition: all 0.1s ease;
+    background: #eef2f7;
+    border-color: #e5e7eb;
+    transform: translateY(-1px);
 }
 
-.actions .link-btn {
-    margin-right: 12px;
+/* Make inline edit inputs feel consistent with the rest of the UI */
+.task-table input,
+.task-table select {
+    height: 36px;
+    padding: 0 10px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+
+    font-size: 14px;
+    color: #111827;
+
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* responsive */
-/* Tablet: tighten layout but keep table */
+.task-table input:focus,
+.task-table select:focus {
+    outline: none;
+    border-color: #10a371;
+    box-shadow: 0 0 0 4px rgba(16, 163, 113, 0.15);
+}
+
+
+/* ------------------------------
+   Actions column buttons
+   ------------------------------ */
+.actions {
+    white-space: nowrap;
+}
+
+/* Put Edit/Delete nicely in one row */
+.actions-buttons {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Delete button: professional danger styling */
+.delete-btn {
+    appearance: none;
+    border: 0;
+    background: none;
+
+    color: #dc2626;
+    font-weight: 800;
+    cursor: pointer;
+
+    padding: 4px 0;
+    text-decoration: none;
+
+    transition: color 0.12s ease, text-decoration 0.12s ease;
+}
+
+.delete-btn:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+/* Tablet: tighten header and form layout */
 @media (max-width: 960px) {
     .task-wrapper {
-        padding: 0 14px;
+        padding: 18px 14px 32px;
     }
 
     .page-header {
         flex-direction: column;
-
-        gap: 14px;
-    }
-
-    .page-header>h1 {
-        font-size: 36px;
+        align-items: flex-start;
+        gap: 12px;
     }
 
     .add-task-form {
@@ -230,39 +506,23 @@
     .add-task-form button[type="submit"] {
         width: 100%;
     }
-
-    .task-table {
-        max-height: 60vh;
-        /* keep scroll on tablets */
-    }
 }
 
-/* Mobile: turn table rows into cards */
+/* Mobile: keep your "table rows become cards" behavior,
+   but make them look more like modern UI cards */
 @media (max-width: 720px) {
-    .page-header>h1 {
-        font-size: 32px;
+
+    /* Hide table header for mobile cards */
+    .task-table thead {
+        display: none;
     }
 
-    .actions {
-        gap: 0px;
-    }
-
-    .task-wrapper {
-        padding: 0 10px;
-    }
-
-    .add-task-form {
-        gap: 10px;
-    }
-
-    .add-task-form button[type="submit"] {
-        width: 100%;
-    }
-
-    /* let cards grow naturally */
+    /* Remove the big scroll container look */
     .task-table {
         max-height: none;
         border: none;
+        box-shadow: none;
+        background: transparent;
     }
 
     .task-table table {
@@ -270,45 +530,67 @@
         width: 100%;
     }
 
-    /* hide sticky header */
-    .task-table thead {
-        display: none;
-    }
-
-    .header-buttons .link-btn {
-        margin-top: 20px;
-        margin-bottom: -20px;
-    }
-
-    /* each row becomes a card */
+    /* Each row becomes a card */
     .task-table tbody tr {
         display: block;
-        margin-bottom: 10px;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        padding: 8px 10px;
-        background: #fff;
+        margin-bottom: 12px;
+
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+
+        padding: 10px 12px;
+
+        /* Mobile card shadow */
+        box-shadow: 0 10px 22px rgba(17, 24, 39, 0.08);
     }
 
-    .task-table tbody tr:last-child {
-        margin-bottom: 0;
+    .task-table tbody tr:hover {
+        background: #ffffff;
+        /* Avoid “table hover” weirdness on mobile */
     }
 
+    /* Each cell becomes a label/value row */
     .task-table tbody td {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: none;
-        padding: 8px 0;
+
+        border-bottom: 1px solid #f1f5f9;
+        padding: 10px 0;
+
         white-space: normal;
         font-size: 14px;
     }
 
-    /* labels on the left (from data-label) */
+    .task-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* Label on left (from data-label) */
     .task-table tbody td::before {
         content: attr(data-label);
-        font-weight: 600;
-        margin-right: 10px;
-        color: #000000;
+        font-weight: 900;
+        color: #374151;
+        margin-right: 12px;
+    }
+
+    /* Actions buttons align better on mobile cards */
+    .actions-buttons {
+        gap: 12px;
+    }
+
+    /* Make progress content align nicely in the "card row" layout */
+    .progress-cell {
+        width: 100%;
+    }
+
+    .progress-meta {
+        justify-content: flex-end;
+    }
+
+    .progress-track {
+        max-width: 220px;
+        /* stops it being too wide on mobile cards */
     }
 }

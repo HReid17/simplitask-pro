@@ -1,216 +1,273 @@
-/* Card Shell */
+/* Page container (match Tasks/Projects width) */
 .card-wrapper {
-  background: #fff;
-  border-radius: 1rem;
-  padding: 1.75rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  margin-top: 40px;
+  max-width: 980px;              /* same feel as tasks page */
+  margin: 0 auto;
+  padding: 26px 18px 44px;
 }
 
-/* Header */
+/* ------------------------------
+   Header card
+------------------------------ */
 .header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "back meta"
+    "title meta";
+  align-items: end;
+  gap: 10px 18px;
+
+  padding: 18px 18px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.10);
+  margin-bottom: 18px;
+}
+
+/* Back button sits top-left */
+.header .link-btn {
+  grid-area: back;
+  justify-self: start;
+}
+
+/* Title */
+.header .name {
+  grid-area: title;
+  margin: 0;
+  font-size: clamp(34px, 3.6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* Meta area (Due + Status) */
+.header .meta {
+  grid-area: meta;
+  justify-self: end;
+
   display: flex;
-  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Meta chips */
+.header .meta span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+}
+
+/* ------------------------------
+   Tasks section card
+------------------------------ */
+.tasks {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.10);
+  overflow: hidden; /* keeps header/rows clean */
+}
+
+/* Column header row */
+.task-columns {
+  display: grid;
+  grid-template-columns: 1.2fr 0.7fr 0.8fr;
+  gap: 16px;
+
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Empty messages */
+.empty {
+  padding: 18px 16px;
+  color: #000000;
+  font-weight: 400;
+}
+
+/* List reset */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Task row (read-only + edit mode share the same grid) */
+.task-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.7fr 0.8fr;
+  gap: 16px;
+  align-items: center;
+
+  padding: 14px 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.task-row:hover {
+  background: #fafafa;
+}
+
+/* Task name */
+.task-name {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Muted due date */
+.muted,
+.task-due {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Progress + actions */
+.task-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
-.header .name {
-  margin-left: 6rem;
-  letter-spacing: 1px;
-}
-
-.header .meta {
-  display: flex;
-  gap: 8rem;
-  color: #6b7280;
-  font-size: 0.95rem;
-  margin-left: auto; 
-  padding-right: 6rem; 
-}
-
-.tasks {
-  margin-top: 2.5rem;
-}
-
-/* 3-Column Layout */
-.task-columns,
-.task-row,
-.add-task-inline {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr; /* Task | Due | Progress */
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-}
-
-/* Header row */
-.task-columns {
+/* Make the % value stand out a bit */
+.task-row .task-progress {
+  font-size: 14px;
   font-weight: 600;
-  color: #4b5563;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 0.4rem;
-  margin-bottom: 0.75rem;
-  font-size: 0.95rem;
 }
 
-/* Task list rows */
-.task-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.task-row {
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
-}
-.task-row:last-child {
-  border-bottom: none;
-}
-
-/* Task cells */
-.task-name {
-  font-weight: 400;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.task-due {
-  color: #6b7280;
-  text-align: left; 
-  padding-left: 4px;
-}
-.task-progress {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-.muted {
-  color: #6b7280;
-}
-
-/* Edit Mode Inputs */
+/* ------------------------------
+   Inputs (edit row + add row)
+------------------------------ */
 .task-row input[type="text"],
 .task-row input[type="date"],
+.task-row input[type="number"],
+.add-task-inline input[type="text"],
+.add-task-inline input[type="date"],
+.add-task-inline input[type="number"] {
+  height: 44px;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: #fff;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.task-row input:focus,
+.add-task-inline input:focus {
+  outline: none;
+  border-color: #10a371;
+  box-shadow: 0 0 0 4px rgba(16, 163, 113, 0.15);
+}
+
 .task-row input[type="number"] {
-  padding: 0.35rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 0.85rem; 
-}
-.task-row .save-btn {
-  background: #10b981;
-  color: #fff;
-  border: none;
-  padding: 0.35rem 0.65rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-.task-row .save-btn:hover {
-  background: #059669;
+  max-width: 90px;
 }
 
-.task-progress .link-btn,
-.task-progress .delete-btn {
-  margin-left: 4px;
-}
-
-/* Add Task Form */
+/* ------------------------------
+   Add-task inline row (inside the card)
+------------------------------ */
 .add-task-inline {
-  margin-top: 2rem;
-  font-size: 0.9rem;
+  display: grid;
+  grid-template-columns: 1.2fr 0.7fr 0.8fr;
+  gap: 16px;
+  align-items: center;
+
+  padding: 14px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
 }
-.add-task-inline input {
-  padding: 0.45rem 0.55rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 0.85rem;
+
+/* Put Add button at the end nicely */
+.add-task-inline .task-progress {
+  justify-content: flex-end;
 }
-.add-task-inline .save-btn {
-  justify-self: end;
+
+/* ------------------------------
+   Buttons (match Tasks page style)
+------------------------------ */
+.link-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: #0f7a53;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: #10a371;
+}
+
+.delete-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: #dc2626;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+}
+
+.delete-btn:hover {
+  color: #b91c1c;
+}
+
+/* Solid dark button (Save/Add Task) */
+.save-btn {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid #111827;
   background: #111827;
   color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 0.55rem 1rem;
-  cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem;
-}
-.add-task-inline .save-btn:hover {
-  background: #0b1220;
-}
-
-/* Links & Buttons */
-.link-btn {
-  background: none;
-  border: none;
-  color: #047857;
   cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-  font: inherit;
-  font-size: 0.9rem;
-}
-.delete-btn {
-  background: none;
-  border: none;
-  color: #dc2626;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-  font: inherit;
-  font-size: 0.9rem;
 }
 
-/* Responsive */
-
-@media (min-width: 721px) and (max-width: 1024px){
-  .header .meta {
-    gap: 25px;
-    margin-right: 9px;
-    padding-right: 0;
-  }
+.save-btn:hover {
+  filter: brightness(1.05);
 }
 
-@media (max-width: 720px) {
-  .task-columns {
-    display: none;
-  }
-  .task-row,
-  .add-task-inline {
+/* ------------------------------
+   Responsive
+------------------------------ */
+@media (max-width: 820px) {
+  .header {
     grid-template-columns: 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
+    grid-template-areas:
+      "back"
+      "title"
+      "meta";
+    align-items: start;
   }
-  .task-due {
-    padding-left: 0;
-  }
-  .task-progress {
+
+  .header .meta {
     justify-self: start;
   }
 
-  .header > h1 {
-    margin-top: 30px;
+  .task-columns,
+  .task-row,
+  .add-task-inline {
+    grid-template-columns: 1fr;
   }
-  
-  .header .meta {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;  
-    justify-content: center;
-    gap: 12px;
-    white-space: nowrap; 
-    width: 100%;
-    margin-top: 18px;
-    margin-left: 44px;
+
+  .task-progress {
+    justify-content: flex-start;
   }
 }
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiFetch } from "../../api/client"; // adjust path if needed
+import { apiFetch } from "../../api/client";
 
 const initialState = {
     projects: [],
@@ -20,7 +20,7 @@ export const fetchProjects = createAsyncThunk(
     }
 );
 
-// (Optional) GET /api/projects/:id -> returns single project with task_count
+// GET /api/projects/:id -> returns single project with task_count
 export const fetchProjectById = createAsyncThunk(
     "projects/fetchProjectById",
     async (id, thunkAPI) => {

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiFetch } from "../../api/client"; // adjust path
+import { apiFetch } from "../../api/client";
 
 const initialState = {
     tasks: [],

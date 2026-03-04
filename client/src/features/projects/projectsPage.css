@@ -1,379 +1,468 @@
+/* ------------------------------
+   Tokens (same feel as Tasks)
+   ------------------------------ */
 :root {
-  --ink: #0f0f0f;
-  --muted: #666;
-  --border: #202020;
-  --panel: #fff;
-  --success: #0f904f;
-  --warn: #e0c300;
-  --error: #e21414;
+  --ink: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --panel: #ffffff;
+
   --radius: 14px;
-  --radius-pill: 16px;
-  --control-h: 44px;
+  --radius-row: 12px;
 
-  --project-cols: minmax(160px, 250px) minmax(250px, 0.8fr) minmax(220px, 1.1fr);
+  --shadow-card: 0 18px 40px rgba(17, 24, 39, 0.10);
+  --shadow-soft: 0 10px 26px rgba(17, 24, 39, 0.08);
+
+  --green-1: #1a9b69;
+  --green-2: #0f7a53;
+
+  --danger: #dc2626;
+
+  /* Columns (Name / Date / Status) */
+  --project-cols: minmax(220px, 1.2fr) minmax(220px, 0.9fr) minmax(320px, 1fr);
 }
 
+/* ------------------------------
+   Page container
+   ------------------------------ */
 .projects-wrapper {
-  max-width: 960px;
-  margin: 38px auto;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 18px 40px;
   color: var(--ink);
-  font-size: 18px;
-  line-height: 1.3;
 }
 
-/* header buttons */
+/* ------------------------------
+   Header (same pattern as Tasks)
+   ------------------------------ */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 10px 0 18px;
+}
+
+.page-header > h1 {
+  font-size: clamp(34px, 3.6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+/* Right side button container */
 .header-buttons {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-left: 8px;
+  gap: 12px;
 }
 
-.link-btn {
-  background: none;
-  border: none;
-  color: #137a34;
-  font-weight: 600;
-  text-decoration: underline;
+/* Primary CTA button (match Tasks “Add New”) */
+.header-buttons .link-btn {
+  appearance: none;
+  border: 1px solid var(--green-2);
+  background: linear-gradient(180deg, var(--green-1) 0%, var(--green-2) 100%);
+  color: #fff;
+
+  border-radius: 10px;
+  padding: 10px 16px;
+
+  font-weight: 800;
+  text-decoration: none;
   cursor: pointer;
-  padding: 6px 2px;
+
+  box-shadow: 0 10px 18px rgba(15, 122, 83, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
 }
 
-.link-btn:focus {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+.header-buttons .link-btn:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(15, 122, 83, 0.22);
 }
 
-/* Column header */
+.header-buttons .link-btn:active {
+  transform: translateY(0);
+}
+
+/* ------------------------------
+   Table card container look
+   - projects-columns = the table header inside the card
+   - projects-list   = the table body inside the same card
+   ------------------------------ */
+
+/* Header row (sticky like Tasks table header) */
 .projects-columns {
   display: grid;
   grid-template-columns: var(--project-cols);
   gap: 16px;
-  padding: 16px 24px;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+
+  padding: 16px 18px;
+
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+
   position: sticky;
   top: 0;
-  z-index: 1;
-  margin-top: 25px;
+  z-index: 2;
+
+  /* subtle separation while scrolling */
+  box-shadow: 0 10px 18px rgba(17, 24, 39, 0.06);
 }
 
-.projects-columns>div {
-  font-weight: 700;
-  text-decoration: underline;
+/* Header typography like Tasks */
+.projects-columns > div {
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--ink);
 }
 
+/* Body area */
 .projects-list {
-  display: grid;
-  row-gap: 26px;
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-  padding: 20px 16px 24px;
-  max-height: calc(100vh - 260px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+
+  box-shadow: var(--shadow-card);
+
+  /* scroll like Tasks */
+  max-height: 62vh;
   overflow: auto;
-  padding-right: 12px;
+
+  /* internal spacing */
+  padding: 0;
 }
 
-.projects-list .project-card {
-  margin: 0;
-}
-
-.projects-list .project-card.project-card--editing {
-  margin: 0;
-}
-
-.projects-list .project-card:first-child {
-  margin-top: 0;
-}
-
+/* Empty state */
 .projects-list .empty {
+  padding: 22px 18px;
   color: var(--muted);
-  padding: 24px;
+  font-weight: 700;
 }
 
-/* Row cards */
+/* ------------------------------
+   Row layout (make it feel like a table row)
+   ------------------------------ */
 .project-card {
   display: grid;
   grid-template-columns: var(--project-cols);
-  gap: 14px;
+  gap: 16px;
   align-items: center;
-  padding: 20px 24px;
-  margin: 18px 0px;
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-pill);
-  font-size: 16px;
+
+  padding: 18px 18px;
+  border-top: 1px solid #f1f5f9; /* soft row divider */
+
+  background: #fff;
 }
 
-.project-card>div {
+/* First row shouldn’t have a top divider */
+.projects-list .project-card:first-child {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Optional: very subtle hover */
+.project-card:hover {
+  background: #fafafa;
+}
+
+/* Keep each cell aligned */
+.project-card > div {
   display: flex;
   align-items: center;
   min-width: 0;
-  min-height: 44px;
 }
 
-.project-card>div:first-child {
+/* Name truncation */
+.project-card > div:first-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.project-card:first-of-type {
-  margin-top: 10px;
-}
-
-
-.project-card input[type="text"] {
-  max-width: 220px;
-  width: 100%;
-  box-sizing: border-box;
-  justify-self: start;
-}
-
-.projects-columns>div:nth-child(2),
-.project-card>div:nth-child(2) {
-  justify-content: flex-start;
-  text-align: left;
-}
-
-.project-card-status {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: flex-start;
-  min-width: 0;
-}
-
-.project-card-status>span:first-child {
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-
-/* Actions */
-.row-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.delete-btn {
-  background: none;
-  padding: 8px 4px;
-  cursor: pointer;
-}
-
-
-.status-dot {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  border: 2px solid var(--ink);
-  flex: 0 0 auto;
-}
-
-.status-dot-green {
-  background: var(--success);
-}
-
-.status-dot-yellow {
-  background: var(--warn);
-}
-
-.status-dot-red {
-  background: var(--error);
-}
-
-/* Inputs in edit rows */
-.project-card input[type="text"],
-.project-card input[type="date"],
-.project-card select {
-  width: 100%;
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 15px;
-  background: #fff;
-}
-
-.save-btn {
-  border: 2px solid var(--ink);
-  background: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* Add Form */
-
-.project-card.project-card--editing {
-  grid-template-columns: var(--project-cols);
-  align-items: center;
-  background: transparent;
-  padding: 20px 22px;
-  margin: 18px 17px;
-}
-
-.project-card.project-card--editing.project-card--new {
-  margin-top: 24px;
-  margin-bottom: 6px;
-}
-
-
-.project-card--editing input[type="text"],
-.project-card--editing input[type="date"],
-.project-card--editing select,
-.project-card--editing .save-btn {
-  height: var(--control-h);
-  line-height: var(--control-h);
-  box-sizing: border-box;
-}
-
-.project-card-status--edit {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-}
-
-.project-card--editing .save-btn {
-  height: 44px;
-  padding: 0 10px;
-  border-radius: 2px;
-}
-
+/* Project name link style */
 .project-link {
   background: none;
   border: none;
   padding: 0;
-  color: var(--accent, #000000);
+  font-weight: 800;
   text-decoration: underline;
   cursor: pointer;
   font: inherit;
 }
 
 .project-link:hover {
-  color: var(--accent, #2563eb);
+  color: #076b46;
 }
 
+/* ------------------------------
+   Status styling (pill + dot)
+   ------------------------------ */
+.project-card-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
 
-/* Responsive */
-@media (max-width: 900px) {
+/* Status pill */
+.project-card-status > span:first-child {
+  font-weight: 800;
+  white-space: nowrap;
+
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  background: #f3f4f6;
+  border: 1px solid var(--border);
+  color: var(--ink);
+}
+
+/* Small dot like your mock */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  flex: 0 0 auto;
+}
+
+.status-dot-green { background: #0f7a53; }
+.status-dot-yellow { background: #d97706; }
+.status-dot-red { background: #dc2626; }
+
+/* Actions pushed to the right inside Status cell */
+.row-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ------------------------------
+   ACTION BUTTONS (match Tasks page)
+   - Edit = green link
+   - Delete = red link
+   ------------------------------ */
+.link-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+
+  color: var(--green-2);
+  font-weight: 800;
+  cursor: pointer;
+
+  padding: 4px 0;
+  text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: #10a371;
+}
+
+/* Delete link */
+.delete-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+
+  color: var(--danger);
+  font-weight: 800;
+  cursor: pointer;
+
+  padding: 4px 0;
+  text-decoration: underline;
+}
+
+.delete-btn:hover {
+  color: #b91c1c;
+}
+
+/* ------------------------------
+   Editing mode / inputs
+   Keep consistent with Tasks inputs
+   ------------------------------ */
+.project-card.project-card--editing {
+  background: #ffffff;
+}
+
+.project-card input[type="text"],
+.project-card input[type="date"],
+.project-card select {
+  height: 40px;
+  width: 100%;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--ink);
+  background: #ffffff;
+
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.project-card input:focus,
+.project-card select:focus {
+  outline: none;
+  border-color: #10a371;
+  box-shadow: 0 0 0 4px rgba(16, 163, 113, 0.15);
+}
+
+/* Save button same vibe as Tasks “solid dark” */
+.save-btn {
+  height: 40px;
+  padding: 0 14px;
+
+  border-radius: 10px;
+  border: 1px solid #111827;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  filter: brightness(1.05);
+}
+
+/* Editing status row wraps so buttons don’t overflow */
+.project-card-status--edit {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* =========================================================
+   FIX: Align "Add New / Edit" row inputs with Status dropdown
+   ========================================================= */
+
+/* Let grid cells stretch so inputs align evenly */
+.project-card {
+  align-items: stretch;
+}
+
+/* Ensure each cell fills its grid column */
+.project-card > div {
+  width: 100%;
+}
+
+/* In editing / new rows, align items from the top */
+.project-card.project-card--new > div,
+.project-card.project-card--editing > div {
+  align-items: flex-start;
+}
+
+/* Status cell should behave like a normal column */
+.project-card.project-card--new .project-card-status,
+.project-card.project-card--editing .project-card-status {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap; /* keeps responsive behaviour */
+}
+
+/* Force dropdown to match other inputs */
+.project-card.project-card--new .project-card-status select,
+.project-card.project-card--editing .project-card-status select {
+  height: 40px;
+  width: 100%;
+}
+
+/* Keep Save + Cancel aligned nicely */
+.project-card-status--edit {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+select {
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+}
+
+/* ------------------------------
+   Responsive
+   ------------------------------ */
+@media (max-width: 960px) {
   .projects-wrapper {
-    max-width: 100%;
-    padding: 0 12px;
+    padding: 18px 14px 32px;
   }
 
-  .project-card,
-  .projects-columns {
-    font-size: 15px;
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }
 
-
+/* Mobile: same “label/value cards” behaviour as Tasks */
 @media (max-width: 720px) {
-  
-  .projects-wrapper {
-    margin: 24px auto;
+  /* Hide table header row */
+  .projects-columns {
+    display: none;
   }
 
-  /* HIDE the 'Name' label on mobile */
-  .project-card>div:first-child::before {
+  /* Remove scroll card behaviour on mobile */
+  .projects-list {
+    max-height: none;
+    overflow: visible;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  /* Each project becomes a card */
+  .project-card {
+    grid-template-columns: 1fr;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 12px;
+    padding: 14px 14px;
+    background: #fff;
+  }
+
+  /* Label/value rows */
+  .project-card > div {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .project-card > div::before {
+    content: attr(data-label);
+    font-weight: 800;
+    color: var(--muted);
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
+  /* Hide the "Name" label (cleaner) */
+  .project-card > div:first-child::before {
     content: "";
     display: none;
   }
 
-  .project-link {
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  /* Make project name align left naturally */
-  .project-card>div:first-child {
-    justify-content: flex-start;
-  }
-
-
-  /* header: title over Add New */
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  /* hide column headings on mobile */
-  .projects-columns {
-    display: none;
-    position: static;
-    border: 0;
-    padding: 0;
-    margin-top: 8px;
-  }
-
-  /* let list grow – no internal scroll */
-  .projects-list {
-    max-height: none;
-    padding: 16px 0 24px;
-    row-gap: 16px;
-    margin-top: 28px;
-  }
-
-  /* each project becomes a stacked card */
-  .project-card {
-    grid-template-columns: 1fr;
-    padding: 16px 14px;
-    margin: 8px 0;
-  }
-
-  /* each cell: "Label : Value" */
-  .project-card>div {
-    justify-content: space-between;
-    align-items: center;
-    min-height: 0;
-  }
-
-  .project-card>div::before {
-    content: attr(data-label);
-    font-weight: 600;
-    margin-right: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  .project-card>div:first-child {
-    white-space: normal;
-  }
-
-  /* status row: status + dot + actions */
+  /* Status row wraps */
   .project-card-status {
-    justify-content: flex-start;
-    gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .status-dot {
-    width: 32px;
-    height: 32px;
   }
 
   .row-actions {
     margin-left: 0;
     width: 100%;
-    margin-left: 0;
     justify-content: flex-start;
-    gap: 0px;
+    gap: 16px;
   }
 
-  /* forms: don’t show labels from data-label */
-  .project-card--editing>div::before {
+  /* Don’t show labels in editing mode */
+  .project-card--editing > div::before {
     content: "";
-  }
-
-  .project-card.project-card--editing {
-    grid-template-columns: 1fr;
-    padding: 16px 14px;
-    margin: 10px 0;
   }
 }

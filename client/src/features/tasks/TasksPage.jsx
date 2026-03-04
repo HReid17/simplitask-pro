@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-// Thunks (async actions) from your Redux slice
+// Thunks (async actions)
 import { fetchTasks, createTask, updateTask, deleteTask } from "./tasksSlice";
 
 // UI assets + styles
@@ -138,7 +138,6 @@ export default function TasksPage() {
         setSortOrder(newOrder);
 
         const sorted = [...tasks].sort((a, b) => {
-            // project_name may exist if your API includes it; fallback to empty string
             const projectA = a.project_name || "";
             const projectB = b.project_name || "";
             return newOrder === "asc"
@@ -290,7 +289,7 @@ export default function TasksPage() {
                     />
 
                     {/* Project dropdown stores the project id as a string in the <select> */}
-                    <select value={String(project)} onChange={(e) => setProject(e.target.value)}>
+                    <select className="project-select" value={String(project)} onChange={(e) => setProject(e.target.value)}>
                         <option value="">Select a Project...</option>
                         {projects.map((p) => (
                             <option key={p.id} value={String(p.id)}>
@@ -493,7 +492,6 @@ export default function TasksPage() {
                                                 </>
                                             )}
                                         </td>
-
                                         {/* ------------------ PROGRESS CELL ------------------ */}
                                         <td data-label="Progress">
                                             {isEditing?.id === task.id && isEditing.field === "progress" ? (
@@ -508,24 +506,37 @@ export default function TasksPage() {
                                                     autoFocus
                                                 />
                                             ) : (
-                                                <>
-                                                    {task.progress}%
-                                                    {activeEditRow === task.id && (
-                                                        <button
-                                                            className="edit-btn"
-                                                            type="button"
-                                                            onClick={() =>
-                                                                handleEdit(
-                                                                    task.id,
-                                                                    "progress",
-                                                                    String(task.progress ?? 0)
-                                                                )
-                                                            }
-                                                        >
-                                                            <img src={pencil} alt="edit" />
-                                                        </button>
-                                                    )}
-                                                </>
+                                                <div className="progress-cell">
+                                                    {/* Bar */}
+                                                    <div
+                                                        className="progress-track"
+                                                        role="progressbar"
+                                                        aria-valuenow={Number(task.progress ?? 0)}
+                                                        aria-valuemin={0}
+                                                        aria-valuemax={100}
+                                                    >
+                                                        <div
+                                                            className="progress-fill"
+                                                            style={{ width: `${Math.min(100, Math.max(0, Number(task.progress ?? 0)))}%` }}
+                                                        />
+                                                    </div>
+
+                                                    {/* Percent + pencil */}
+                                                    <div className="progress-meta">
+                                                        <span className="progress-text">{task.progress}%</span>
+
+                                                        {activeEditRow === task.id && (
+                                                            <button
+                                                                className="edit-btn"
+                                                                type="button"
+                                                                onClick={() => handleEdit(task.id, "progress", String(task.progress ?? 0))}
+                                                                aria-label="Edit progress"
+                                                            >
+                                                                <img src={pencil} alt="" />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             )}
                                         </td>
 
