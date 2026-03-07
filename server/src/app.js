@@ -1,9 +1,12 @@
 import cors from "cors";
 import express from 'express';
+import swaggerUi from "swagger-ui-express";
 
 import authRoutes from './routes/auth.routes.js';
 import taskRoutes from './routes/tasks.routes.js';
 import projectRoutes from './routes/projects.routes.js';
+
+import swaggerSpec from "./docs/swagger.js";
 
 import pool from './db/pool.js';
 
@@ -16,6 +19,14 @@ app.use(
 );
 
 app.use(express.json());
+
+// Swagger docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 // API health check
 app.get("/api/health", (req, res) => {
